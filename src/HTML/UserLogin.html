@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Authentication</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <div id="login-form" class="row justify-content-center">
+      <div class="col-md-4">
+        <h2 class="text-center mb-4">Login</h2>
+        <form>
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" class="form-control" id="loginEmail" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="mt-3 text-center">Don't have an account? <a href="#" onclick="showRegistration()">Register</a></p>
+        <p class="text-center"><a href="#" onclick="showForgotPassword()">Forgot Password?</a></p>
+      </div>
+    </div>
+
+    <!-- Registration Form -->
+    <!-- Registration Form -->
+<div id="registration-form" class="row justify-content-center" style="display: none;">
+    <div class="col-md-4">
+      <h2 class="text-center mb-4">Register</h2>
+      <form>
+        <div class="form-group">
+          <label for="registerName">Name</label>
+          <input type="text" class="form-control" id="registerName" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+          <label for="registerEmail">Email</label>
+          <input type="email" class="form-control" id="registerEmail" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+          <label for="registerEmailConfirmed">Confirm Email</label>
+          <input type="email" class="form-control" id="registerEmailConfirmed" placeholder="Confirm email">
+        </div>
+        <div class="form-group">
+          <label for="registerPhone">Phone</label>
+          <input type="text" class="form-control" id="registerPhone" placeholder="Enter phone number">
+        </div>
+        <div class="form-group">
+          <label for="registerPhoneConfirmed">Confirm Phone</label>
+          <input type="text" class="form-control" id="registerPhoneConfirmed" placeholder="Confirm phone number">
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Password</label>
+          <input type="password" class="form-control" id="registerPassword" placeholder="Password">
+        </div>
+        <div class="form-group">
+          <label for="registerPasswordConfirmed">Confirm Password</label>
+          <input type="password" class="form-control" id="registerPasswordConfirmed" placeholder="Confirm password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+      </form>
+      <p class="mt-3 text-center">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+    </div>
+  </div>
+  
+
+    <!-- Forgot Password Form -->
+    <div id="forgot-password-form" class="row justify-content-center" style="display: none;">
+      <div class="col-md-4">
+        <h2 class="text-center mb-4">Forgot Password</h2>
+        <form>
+          <div class="form-group">
+            <label for="forgotPasswordEmail">Email</label>
+            <input type="email" class="form-control" id="forgotPasswordEmail" placeholder="Enter email">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+        </form>
+        <p class="mt-3 text-center">Remember your password? <a href="#" onclick="showLogin()">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    function showRegistration() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("registration-form").style.display = "block";
+      document.getElementById("forgot-password-form").style.display = "none";
+    }
+
+    function showLogin() {
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("registration-form").style.display = "none";
+      document.getElementById("forgot-password-form").style.display = "none";
+    }
+
+    function showForgotPassword() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("registration-form").style.display = "none";
+      document.getElementById("forgot-password-form").style.display = "block";
+    }
+  </script>
+</body>
+</html>
