@@ -6,6 +6,32 @@
     <title>Crime List</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f2f2f2; /* Change background color to a suitable shade */
+        }
+
+        .highlight-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.highlight-info h5,
+.highlight-info p {
+    margin-right: 10px; /* Add some spacing between elements */
+    max-width: calc(100% - 130px); /* Adjust the width as needed */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+
+
+    </style>
+
 </head>
 <body>
     <div class="container">
@@ -58,6 +84,46 @@
         </div>
     </div>
 
+    <!-- Edit Crime Modal -->
+    <div class="modal fade" id="editCrimeModal" tabindex="-1" aria-labelledby="editCrimeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCrimeModalLabel">Edit Crime</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCrimeForm" enctype="multipart/form-data">
+                        <input type="hidden" id="editCrimeId" name="Id">
+                        <div class="form-group">
+                            <label for="editCrimeType">Crime Type</label>
+                            <input type="text" class="form-control" id="editCrimeType" name="CrimeType" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editLocation">Location</label>
+                            <input type="text" class="form-control" id="editLocation" name="Location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDate">Date</label>
+                            <input type="date" class="form-control" id="editDate" name="Date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editImageFile">Image File</label>
+                            <input type="file" class="form-control-file" id="editImageFile" name="imageFile" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="editVideoFile">Video File</label>
+                            <input type="file" class="form-control-file" id="editVideoFile" name="videoFile" accept="video/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
@@ -70,6 +136,11 @@
                 e.preventDefault();
                 createCrime();
             });
+
+            $('#editCrimeForm').on('submit', function(e) {
+                e.preventDefault();
+                updateCrime();
+            });
         });
 
         function fetchCrimes() {
@@ -81,17 +152,23 @@
                     crimeList.empty();
                     data.forEach(crime => {
                         const crimeItem = $(`
-                            <div class="col-md-4 mb-4">
-                                <div class="card">
-                                    <img src="${crime.imageUrl}" class="card-img-top" alt="${crime.crimeType}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${crime.crimeType}</h5>
-                                        <p class="card-text">${crime.location}</p>
-                                        <p class="card-text">${new Date(crime.date).toLocaleDateString()}</p>
-                                        ${crime.crimeVideo ? `<video width="100%" controls><source src="${crime.crimeVideo}" type="video/mp4">Your browser does not support the video tag.</video>` : ''}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="${crime.imageUrl}" class="card-img-top" alt="${crime.crimeType}">
+                                <div class="card-body">
+                                    <div class="highlight-info">
+                                        <h5 class="card-title">${crime.crimeType}</h5> <!-- Highlighted Crime Type -->
+                                        <p class="card-text">${crime.location}</p> <!-- Highlighted Location -->
+                                        <p class="card-text">${new Date(crime.date).toLocaleDateString()}</p> <!-- Date -->
                                     </div>
+                                    ${crime.crimeVideo ? `<video width="100%" controls><source src="${crime.crimeVideo}" type="video/mp4">Your browser does not support the video tag.</video>` : ''}
+                                    <button class="btn btn-warning btn-sm mt-2" onclick="showEditCrimeModal(${crime.id})">Edit</button>
+                                    <button class="btn btn-danger btn-sm mt-2" onclick="deleteCrime(${crime.id})">Delete</button>
                                 </div>
                             </div>
+                        </div>
+
+
                         `);
                         crimeList.append(crimeItem);
                     });
@@ -127,6 +204,66 @@
                     }
                 }
             });
+        }
+
+        function showEditCrimeModal(id) {
+            $.ajax({
+                url: `${apiBaseUrl}/${id}`,
+                method: 'GET',
+                success: function(crime) {
+                    $('#editCrimeId').val(crime.id);
+                    $('#editCrimeType').val(crime.crimeType);
+                    $('#editLocation').val(crime.location);
+                    $('#editDate').val(new Date(crime.date).toISOString().substring(0, 10));
+                    $('#editCrimeModal').modal('show');
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function updateCrime() {
+            const form = $('#editCrimeForm')[0];
+            const formData = new FormData(form);
+            const id = $('#editCrimeId').val();
+
+            $.ajax({
+                url: `${apiBaseUrl}/${id}`,
+                method: 'PUT',
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function(data) {
+                    $('#editCrimeModal').modal('hide');
+                    form.reset();
+                    fetchCrimes();
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    if (error.responseJSON && error.responseJSON.message) {
+                        alert('Failed to update crime: ' + error.responseJSON.message);
+                    } else {
+                        alert('Failed to update crime. Please check your input and try again.');
+                    }
+                }
+            });
+        }
+
+        function deleteCrime(id) {
+            if (confirm('Are you sure you want to delete this crime?')) {
+                $.ajax({
+                    url: `${apiBaseUrl}/${id}`,
+                    method: 'DELETE',
+                    success: function(data) {
+                        fetchCrimes();
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
         }
     </script>
 </body>
