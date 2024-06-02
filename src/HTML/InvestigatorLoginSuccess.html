@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigators</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Investigators</h1>
+        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#createInvestigatorModal">Create Investigator</button>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Username</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="investigatorsTableBody">
+                <!-- Investigators will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Create Investigator Modal -->
+    <div class="modal fade" id="createInvestigatorModal" tabindex="-1" role="dialog" aria-labelledby="createInvestigatorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createInvestigatorModalLabel">Create Investigator</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createInvestigatorForm">
+                        <div class="form-group">
+                            <label for="investigatorName">Name</label>
+                            <input type="text" class="form-control" id="investigatorName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investigatorDescription">Description</label>
+                            <input type="text" class="form-control" id="investigatorDescription" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investigatorUsername">Username</label>
+                            <input type="text" class="form-control" id="investigatorUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investigatorPassword">Password</label>
+                            <input type="password" class="form-control" id="investigatorPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investigatorConfirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="investigatorConfirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investigatorLocation">Location</label>
+                            <input type="text" class="form-control" id="investigatorLocation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminId">Admin ID</label>
+                            <input type="number" class="form-control" id="adminId" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Fetch and display investigators
+            function loadInvestigators() {
+                $.ajax({
+                    url: 'http://localhost:5004/api/Investigators',
+                    type: 'GET',
+                    success: function (data) {
+                        var tableBody = $('#investigatorsTableBody');
+                        tableBody.empty();
+                        data.forEach(function (investigator) {
+                            tableBody.append(`
+                                <tr>
+                                    <td>${investigator.investigatorId}</td>
+                                    <td>${investigator.investigatorName}</td>
+                                    <td>${investigator.investigatorDescription}</td>
+                                    <td>${investigator.investigatorUsername}</td>
+                                    <td>${investigator.investigatorLocation}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm edit-btn" data-id="${investigator.investigatorId}">Edit</button>
+                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${investigator.investigatorId}">Delete</button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
+            }
+
+            loadInvestigators();
+
+            // Handle form submission
+            $('#createInvestigatorForm').on('submit', function (e) {
+                e.preventDefault();
+                var investigator = {
+                    InvestigatorName: $('#investigatorName').val(),
+                    InvestigatorDescription: $('#investigatorDescription').val(),
+                    InvestigatorUsername: $('#investigatorUsername').val(),
+                    InvestigatorPassword: $('#investigatorPassword').val(),
+                    InvestigatorConfirmPassword: $('#investigatorConfirmPassword').val(),
+                    InvestigatorLocation: $('#investigatorLocation').val(),
+                    AdminId: $('#adminId').val()
+                };
+
+                $.ajax({
+                    url: 'http://localhost:5004/api/Investigators',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(investigator),
+                    success: function (result) {
+                        $('#createInvestigatorModal').modal('hide');
+                        loadInvestigators();
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
+            });
+
+            // Handle delete button click
+            $(document).on('click', '.delete-btn', function () {
+                var id = $(this).data('id');
+                if (confirm('Are you sure you want to delete this investigator?')) {
+                    $.ajax({
+                        url: 'http://localhost:5004/api/Investigators/' + id,
+                        type: 'DELETE',
+                        success: function (result) {
+                            loadInvestigators();
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error: ' + error);
+                        }
+                    });
+                }
+            });
+
+            // Handle edit button click (similar to create, not implemented here)
+            $(document).on('click', '.edit-btn', function () {
+                var id = $(this).data('id');
+                // Load data into the form and handle updating similar to create
+                // Not implemented in this example
+            });
+        });
+    </script>
+</body>
+</html>
