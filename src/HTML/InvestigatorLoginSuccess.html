@@ -75,6 +75,54 @@
         </div>
     </div>
 
+    <!-- Edit Investigator Modal -->
+    <div class="modal fade" id="editInvestigatorModal" tabindex="-1" role="dialog" aria-labelledby="editInvestigatorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editInvestigatorModalLabel">Edit Investigator</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editInvestigatorForm">
+                        <input type="hidden" id="editInvestigatorId">
+                        <div class="form-group">
+                            <label for="editInvestigatorName">Name</label>
+                            <input type="text" class="form-control" id="editInvestigatorName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editInvestigatorDescription">Description</label>
+                            <input type="text" class="form-control" id="editInvestigatorDescription" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editInvestigatorUsername">Username</label>
+                            <input type="text" class="form-control" id="editInvestigatorUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editInvestigatorPassword">Password</label>
+                            <input type="password" class="form-control" id="editInvestigatorPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="editInvestigatorConfirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="editInvestigatorConfirmPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="editInvestigatorLocation">Location</label>
+                            <input type="text" class="form-control" id="editInvestigatorLocation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAdminId">Admin ID</label>
+                            <input type="number" class="form-control" id="editAdminId" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -111,7 +159,7 @@
 
             loadInvestigators();
 
-            // Handle form submission
+            // Handle create form submission
             $('#createInvestigatorForm').on('submit', function (e) {
                 e.preventDefault();
                 var investigator = {
@@ -156,11 +204,59 @@
                 }
             });
 
-            // Handle edit button click (similar to create, not implemented here)
+            // Handle edit button click
             $(document).on('click', '.edit-btn', function () {
                 var id = $(this).data('id');
-                // Load data into the form and handle updating similar to create
-                // Not implemented in this example
+                $.ajax({
+                    url: 'http://localhost:5004/api/Investigators/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#editInvestigatorId').val(data.investigatorId);
+                        $('#editInvestigatorName').val(data.investigatorName);
+                        $('#editInvestigatorDescription').val(data.investigatorDescription);
+                        $('#editInvestigatorUsername').val(data.investigatorUsername);
+                        $('#editInvestigatorLocation').val(data.investigatorLocation);
+                        $('#editAdminId').val(data.adminId);
+                        $('#editInvestigatorModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
+            });
+
+            // Handle edit form submission
+            $('#editInvestigatorForm').on('submit', function (e) {
+                e.preventDefault();
+                var id = $('#editInvestigatorId').val();
+                var investigator = {
+                    investigatorId: $('#editInvestigatorId').val(),
+                    InvestigatorName: $('#editInvestigatorName').val(),
+                    InvestigatorDescription: $('#editInvestigatorDescription').val(),
+                    InvestigatorUsername: $('#editInvestigatorUsername').val(),
+                    InvestigatorLocation: $('#editInvestigatorLocation').val(),
+                    AdminId: $('#editAdminId').val()
+                };
+                if ($('#editInvestigatorPassword').val()) {
+                    investigator.InvestigatorPassword = $('#editInvestigatorPassword').val();
+                    investigator.InvestigatorConfirmPassword = $('#editInvestigatorConfirmPassword').val();
+                }
+             
+                
+                $.ajax({
+                    
+                    url: 'http://localhost:5004/api/Investigators/' + id,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(investigator),
+                    success: function (result) {
+                        $('#editInvestigatorModal').modal('hide');
+                        loadInvestigators();
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
             });
         });
     </script>

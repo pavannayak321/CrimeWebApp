@@ -17,7 +17,7 @@
                 alert('Admin deleted successfully');
                 getAdmins(); // Refresh the table after deletion
             } else {
-                alert('Error deleting admin:', xhr.status);
+                alert('Error deleting admin: ' + xhr.status);
             }
         }
       };
@@ -32,17 +32,16 @@
     }
 
     function updateAdmin() {
-    var adminId = document.getElementById('editAdminId').value;
-    var adminName = document.getElementById('editAdminName').value;
-    var adminPassword = document.getElementById('editAdminPassword').value;
+      var adminId = document.getElementById('editAdminId').value;
+      var adminName = document.getElementById('editAdminName').value;
+      var adminPassword = document.getElementById('editAdminPassword').value;
 
-    var xhr = new XMLHttpRequest();
-    var url = 'http://localhost:5004/api/Admins/' + adminId;
-    xhr.open('PUT', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      var xhr = new XMLHttpRequest();
+      var url = 'http://localhost:5004/api/Admins/' + adminId;
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-    xhr.onreadystatechange = function() {
-      alert(xhr.response);
+      xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 204) {
                 alert('Admin updated successfully');
@@ -52,12 +51,11 @@
                 alert('Error updating admin: ' + xhr.status);
             }
         }
-    };
+      };
 
-    var data = JSON.stringify({AdminId: adminId,  adminName: adminName, adminPassword: adminPassword });
-    xhr.send(data);
-}
-
+      var data = JSON.stringify({ adminId: adminId, adminName: adminName, adminPassword: adminPassword });
+      xhr.send(data);
+    }
 
     function addAdmin() {
       var adminName = document.getElementById('newAdminName').value;
@@ -75,7 +73,7 @@
                 document.getElementById('newAdminPassword').value = '';
                 getAdmins(); // Refresh the table after adding
             } else {
-                alert('Error adding admin:', xhr.status);
+                alert('Error adding admin: ' + xhr.status);
             }
         }
       };
@@ -126,7 +124,7 @@
                     tableBody.appendChild(row);
                 });
             } else {
-                console.error('Error occurred:', xhr.status);
+                console.error('Error occurred: ' + xhr.status);
             }
         }
       };
@@ -166,11 +164,11 @@
     <div class="card mt-3">
       <div class="card-body">
         <h5 class="card-title">Click to load Admin</h5>
-        <button href="#" onclick="getAdmins()" class="btn btn-primary">Read More</button>
+        <button href="#" onclick="getAdmins()" class="btn btn-primary">Load Admins</button>
       </div>
     </div>
     <!-- Add Admin Form -->
-    <div class="card mt-3" bg bg-color="black">
+    <div class="card mt-3">
       <div class="card-body">
         <h5 class="card-title">Add New Admin</h5>
         <form id="addAdminForm">
@@ -232,3 +230,10 @@
     </div>
   </div>
 
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
