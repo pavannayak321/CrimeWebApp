@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Investigator Login</title>
   <!-- Bootstrap CSS -->
+   <!-- Bootstrap JS and dependencies -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     .login-container {
@@ -38,6 +42,49 @@
       text-decoration: underline;
     }
   </style>
+    <script>
+        $(document).ready(function () {
+            $("#adminlogintocreateinvestigator").submit(function (e) {
+                e.preventDefault();
+                // Validate form fields
+                var username = $("#investigatorName").val().trim();
+                var password = $("#investigatorPassword").val().trim();
+                if (username === "") {
+                    $("#investigatorName").addClass("is-invalid");
+                    return;
+                }
+                if (password === "") {
+                    $("#investigatorPassword").addClass("is-invalid");
+                    return;
+                }
+    
+                // Send AJAX request to backend for validation
+                $.ajax({
+                    url: 'http://localhost:5004/api/Admins/login',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username: username, password: password }),
+                    success: function (response) {
+                        if (response.message === "Login successful.") {
+                            window.location.href = 'InvestigatorLoginSuccess.html';
+                        } else {
+                          alert("Invalid Credentials!")
+                            $("#error-message").text(response.message);
+                        }
+                    },
+                    error: function () {
+                        $("#error-message").text("An error occurred. Please try again later.");
+                    }
+                });
+            });
+    
+            // Remove validation feedback on input change
+            $("#username, #password").on("input", function () {
+                $(this).removeClass("is-invalid");
+                $("#error-message").text("");
+            });
+        });
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -61,15 +108,15 @@
       </nav>
   <div class="login-container">
     <div class="login-form">
-      <h3 class="text-center">Investigator Login</h3>
-      <form>
+      <h3 class="text-center">Admin Login to Create Investigator!</h3>
+      <form id="adminlogintocreateinvestigator">
         <div class="form-group">
           <label for="investigatorName">Username</label>
           <input type="text" class="form-control" id="investigatorName" placeholder="Enter username" required>
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Password" required>
+          <label for="investigatorPassword">Password</label>
+          <input type="password" class="form-control" id="investigatorPassword" placeholder="Password" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
         <div class="form-footer mt-3">
@@ -105,9 +152,6 @@
 
   
 
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
 </body>
 </html>

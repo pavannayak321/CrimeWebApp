@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Management</title>
+  <title>User Login</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- jQuery and Bootstrap JS -->
@@ -13,105 +13,50 @@
 </head>
 <body>
 <div class="container mt-5">
-  <h2 class="text-center mb-4">User Management</h2>
-  
-  
-  
-
-  <!-- Registration Form -->
-  <div id="registration-form" class="row justify-content-center" >
+  <h2 class="text-center mb-4">User Login</h2>
+  <div class="row justify-content-center">
     <div class="col-md-6">
-      <h2 class="text-center mb-4">Register</h2>
-      <form id="registerForm" enctype="multipart/form-data">
+      <form id="loginForm">
         <div class="form-group">
-          <label for="registerName">Name</label>
-          <input type="text" class="form-control" id="registerName" name="UserName" placeholder="Enter name">
+          <label for="loginEmail">Email</label>
+          <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Enter email" required autocomplete="email">
         </div>
         <div class="form-group">
-          <label for="registerEmail">Email</label>
-          <input type="email" class="form-control" id="registerEmail" name="UserEmail" placeholder="Enter email">
+          <label for="loginPassword">Password</label>
+          <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter password" required autocomplete="current-password">
         </div>
-        <div class="form-group">
-          <label for="registerEmailConfirmed">Confirm Email</label>
-          <input type="email" class="form-control" id="registerEmailConfirmed" name="UserEmailConfirmed" placeholder="Confirm email">
-        </div>
-        <div class="form-group">
-          <label for="registerPhone">Phone</label>
-          <input type="text" class="form-control" id="registerPhone" name="UserPhone" placeholder="Enter phone number">
-        </div>
-        <div class="form-group">
-          <label for="registerPhoneConfirmed">Confirm Phone</label>
-          <input type="text" class="form-control" id="registerPhoneConfirmed" name="UserPhoneConfirmed" placeholder="Confirm phone number">
-        </div>
-        <div class="form-group">
-          <label for="registerPassword">Password</label>
-          <input type="password" class="form-control" id="registerPassword" name="UserPassword" placeholder="Password">
-        </div>
-        <div class="form-group">
-          <label for="registerPasswordConfirmed">Confirm Password</label>
-          <input type="password" class="form-control" id="registerPasswordConfirmed" name="UserPasswordConfirmed" placeholder="Confirm password">
-        </div>
-        <div class="form-group">
-          <label for="registerUserImageFile">Upload Image</label>
-          <input type="file" class="form-control" id="registerUserImageFile" name="imageFile">
-        </div>
-        <!-- Hidden field for UserImage with a dummy URL -->
-        <input type="hidden" id="registerUserImage" name="UserImage" value="https://example.com/dummy-image.jpg">
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
-        <button type="button" class="btn btn-secondary btn-block" onclick="hideRegistration()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
     </div>
   </div>
-
- 
 </div>
 
 <script>
   $(document).ready(function() {
-   
-    // Handle registration form submission
-    $('#registerForm').submit(function(e) {
+    $('#loginForm').submit(function(e) {
       e.preventDefault(); // Prevent form submission
 
-      var formData = new FormData(this); // Create a FormData object
+      var loginData = {
+        email: $('#loginEmail').val(),
+        password: $('#loginPassword').val()
+      };
 
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:5004/api/Users',
-        data: formData,
-        processData: false,
-        contentType: false,
+        url: 'http://localhost:5004/api/Users/Login', // Replace with your actual login endpoint
+        data: JSON.stringify(loginData),
+        contentType: 'application/json',
         success: function(response) {
-          alert('User created successfully');
-          hideRegistration();
+          alert('Login successful');
+          // Redirect to the main application page
+          window.location.href = '/index.html'; // Change this to your main application page
         },
         error: function(xhr, status, error) {
-          alert('Error creating user: ' + xhr.responseText);
+          alert('Error logging in: ' + xhr.responseText);
         }
       });
     });
-
   });
-
-  // Load users
-  
-  // Show registration form
-  function showRegistration() {
-    $('#registration-form').show();
-  }
-
-  // Hide registration form
-  function hideRegistration() {
-    $('#registration-form').hide();
-    $('#registerForm')[0].reset(); // Clear form fields
-  }
-
-  
-
-
-
-  // Delete user
-
 </script>
 </body>
 </html>
