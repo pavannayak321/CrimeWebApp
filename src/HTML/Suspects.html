@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suspects Records</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    .suspect-card {
+      margin: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .suspect-image {
+      max-height: 200px;
+      object-fit: cover;
+    }
+  </style>
+  <script>
+    $(document).ready(function() {
+      loadSuspects();
+
+      function loadSuspects() {
+        $.ajax({
+          url: 'http://localhost:5004/api/Suspects',
+          type: 'GET',
+          success: function(data) {
+            $('#suspectsContainer').empty();
+            $.each(data, function(index, suspect) {
+              $('#suspectsContainer').append(
+                `<div class="col-md-4">
+                  <div class="card suspect-card">
+                    <img src="${suspect.suspectImageUrl}" class="card-img-top suspect-image" alt="Suspect Image">
+                    <div class="card-body">
+                      <h5 class="card-title">${suspect.suspectName}</h5>
+                      <p class="card-text">${suspect.suspectAddress}</p>
+                    </div>
+                  </div>
+                </div>`
+              );
+            });
+          },
+          error: function(error) {
+            console.error('Error loading suspects:', error);
+          }
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Crime Reporting</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin-login.html">Admin Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/investigator-login.html">Investigator Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/user-login.html">User Login</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Suspects Records</h2>
+    <div class="row" id="suspectsContainer">
+      <!-- Suspect cards will be appended here -->
+    </div>
+  </div>
+</body>
+</html>

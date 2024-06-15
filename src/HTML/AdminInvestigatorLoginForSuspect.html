@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin(or)Investigator Login</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <!-- Bootstrap JS and dependencies -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    .login-container {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f7f7f7;
+    }
+    .login-form {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .login-form h3 {
+      margin-bottom: 20px;
+    }
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .form-footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  
+<script>
+  $(document).ready(function() {
+    $('#investigatorloginform').submit(function(e) {
+      e.preventDefault(); // Prevent form submission
+      var loginData = {
+        username: $('#investigatorOrAdminName').val(),
+        password: $('#AdminOrInvestigatorPassword').val()
+      };
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:5004/api/Investigators/Login', // Replace with your actual login endpoint
+        data: JSON.stringify(loginData),
+        contentType: 'application/json',
+        success: function(response) {
+          alert('Login successful');
+          // Redirect to the main application page
+          window.location.href = 'Suspects.html'; // Change this to your main application page
+        },
+        error: function(xhr, status, error) {
+          alert('Error logging in: ' + xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <a class="navbar-brand" href="#">
+          <img src="/Images/crimereportlogo.jpg" width="50" height="50"/>
+        </a>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./admin-login.html">Admin Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Investigator Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./src/HTML/UserLogin.html">User Login</a>
+          </li>
+        </ul>
+      </nav>
+  <div class="login-container">
+    <div class="login-form">
+      <h3 class="text-center">Investigator Login For Suspect</h3>
+      <form id="investigatorloginform">
+        <div class="form-group">
+          <label for="investigatorOrAdminName">Username</label>
+          <input type="text" class="form-control" id="investigatorOrAdminName" placeholder="Enter Username" required>
+        </div>
+        <div class="form-group">
+          <label for="AdminOrInvestigatorPassword">Password</label>
+          <input type="password" class="form-control" id="AdminOrInvestigatorPassword" placeholder="Enter Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
