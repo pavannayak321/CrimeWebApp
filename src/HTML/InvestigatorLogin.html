@@ -6,6 +6,10 @@
   <title>Investigator Login</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <!-- Bootstrap JS and dependencies -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <style>
     .login-container {
       height: 100vh;
@@ -38,6 +42,38 @@
       text-decoration: underline;
     }
   </style>
+
+  
+<script>
+  $(document).ready(function() {
+    $('#investigatorloginform').submit(function(e) {
+      e.preventDefault(); // Prevent form submission
+      var loginData = {
+        username: $('#investigatorName').val(),
+        password: $('#password').val()
+      };
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:5004/api/Investigators/Login', // Replace with your actual login endpoint
+        data: JSON.stringify(loginData),
+        contentType: 'application/json',
+        success: function(response) {
+          alert('Login successful');
+          // Redirect to the main application page
+          window.location.href = '/index.html'; // Change this to your main application page
+        },
+        error: function(xhr, status, error) {
+          alert('Error logging in: ' + xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
+
+</script>
+
+
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -62,7 +98,7 @@
   <div class="login-container">
     <div class="login-form">
       <h3 class="text-center">Investigator Login</h3>
-      <form>
+      <form id="investigatorloginform">
         <div class="form-group">
           <label for="investigatorName">Username</label>
           <input type="text" class="form-control" id="investigatorName" placeholder="Enter username" required>
@@ -72,42 +108,9 @@
           <input type="password" class="form-control" id="password" placeholder="Password" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
-        <div class="form-footer mt-3">
-          <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a>
-          
-        </div>
       </form>
     </div>
   </div>
 
-  <!-- Forgot Password Modal -->
-  <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="forgotEmail">Email address</label>
-              <input type="email" class="form-control" id="forgotEmail" placeholder="Enter email" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  
-
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
