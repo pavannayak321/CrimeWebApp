@@ -28,7 +28,7 @@
 
       function loadSuspects() {
         $.ajax({
-          url: 'http://localhost:5004/api/Suspects',
+          url: 'https://crimeadminapi.azurewebsites.net/api/Suspects',
           type: 'GET',
           success: function(data) {
             $('#suspectsContainer').empty();

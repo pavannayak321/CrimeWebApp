@@ -62,7 +62,7 @@
       var adminPassword = document.getElementById('newAdminPassword').value;
 
       var xhr = new XMLHttpRequest();
-      var url = 'http://localhost:5004/api/Admins';
+      var url = 'https://crimeadminapi.azurewebsites.net/api/Admins';
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function() {
@@ -84,7 +84,7 @@
 
     function getAdmins() {
       var xhr = new XMLHttpRequest();
-      var url = 'http://localhost:5004/api/Admins';
+      var url = 'https://crimeadminapi.azurewebsites.net/api/Admins';
       xhr.open('GET', url, true);
       xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {

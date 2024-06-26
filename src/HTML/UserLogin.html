@@ -43,13 +43,13 @@
 
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:5004/api/Users/Login', // Replace with your actual login endpoint
+        url: 'https://crimeadminapi.azurewebsites.net/api/Users/Login', // Replace with your actual login endpoint
         data: JSON.stringify(loginData),
         contentType: 'application/json',
         success: function(response) {
           alert('Login successful');
           // Redirect to the main application page
-          window.location.href = '/index.html'; // Change this to your main application page
+          window.location.href = 'CrimeRecords.html'; // Change this to your main application page
         },
         error: function(xhr, status, error) {
           alert('Error logging in: ' + xhr.responseText);

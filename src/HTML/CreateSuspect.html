@@ -25,7 +25,7 @@
                 }
 
                 $.ajax({
-                    url: 'http://localhost:5004/api/Suspects',
+                    url: 'https://crimeadminapi.azurewebsites.net/api/Suspects',
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -44,7 +44,7 @@
 
             function loadSuspects() {
                 $.ajax({
-                    url: 'http://localhost:5004/api/Suspects',
+                    url: 'https://crimeadminapi.azurewebsites.net/api/Suspects',
                     type: 'GET',
                     success: function(response) {
                         var suspectsTable = $('#suspectsTable tbody');
@@ -75,7 +75,7 @@
 
             function deleteSuspect(suspectID) {
                 $.ajax({
-                    url: `http://localhost:5004/api/Suspects/${suspectID}`,
+                    url: `https://crimeadminapi.azurewebsites.net/api/Suspects/${suspectID}`,
                     type: 'DELETE',
                     success: function(response) {
                         alert('Suspect deleted successfully');

@@ -55,7 +55,7 @@
 
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:5004/api/Investigators/Login', // Replace with your actual login endpoint
+        url: 'https://crimeadminapi.azurewebsites.net/api/Investigators/Login', // Replace with your actual login endpoint
         data: JSON.stringify(loginData),
         contentType: 'application/json',
         success: function(response) {
